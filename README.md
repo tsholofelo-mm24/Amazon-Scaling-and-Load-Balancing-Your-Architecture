@@ -286,6 +286,14 @@ On this step you create a **launch template** for your Auto Scaling group. A lau
 3.6 In the **Network settings** section, choose the **Security groups** dropdown list, and choose **Web Security Group**.
 
 
+
+
+<img width="863" height="482" alt="image" src="https://github.com/user-attachments/assets/8423877a-dabb-4ff2-8cab-c71f2f4f0325" />
+
+
+
+
+
 _When you launch an instance, you can pass user data to the instance. The data can be used to run configuration tasks and scripts._
 
 
@@ -296,10 +304,30 @@ _When you launch an instance, you can pass user data to the instance. The data c
   * Successfully created lab-app-launch-template.
 
 
+
+
+<img width="948" height="773" alt="image" src="https://github.com/user-attachments/assets/d1b96e91-b521-45ef-a094-ebc67fd5c99a" />
+
+
+
+
+
 3.8 Choose **View launch templates**.
 
 
+
+
+<img width="1899" height="300" alt="image" src="https://github.com/user-attachments/assets/b38907eb-d487-43bc-82a5-a777625fa3c5" />
+
+
+
+
 **STEP 4: CREATING AN AUTO SCALING GROUP**
+
+
+4.1 <img width="911" height="30" alt="image" src="https://github.com/user-attachments/assets/7fd53a6f-31cc-41c0-90af-293e26224197" />
+
+4.2 
 
 
 **STEP 5: VERIFYING THAT LOAD BALANCING IS WORKING**
