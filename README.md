@@ -327,15 +327,141 @@ _When you launch an instance, you can pass user data to the instance. The data c
 
 4.1 <img width="911" height="30" alt="image" src="https://github.com/user-attachments/assets/7fd53a6f-31cc-41c0-90af-293e26224197" />
 
-4.2 
+4.2 On the **Choose launch template or configuration** page, in the Name section, for Auto Scaling group name, enter _Lab Auto Scaling Group_
 
+4.3 Choose **Next**
+
+4.4 On the Choose instance launch options page, in the Network section, configure the following options:
+
+   * From the VPC dropdown list, choose Lab VPC.
+
+   * From the Availability Zones and subnets dropdown list, choose **Private Subnet 1 (10.0.1.0/24)** and **Private Subnet 2 (10.0.3.0/24)**.
+
+4.5 On the Configure advanced options – optional page, configure the following options: 
+
+   * In the Load balancing – optional section, choose Attach to an existing load balancer.
+
+   * In the Attach to an existing load balancer section, configure the following options:
+
+   * Choose Choose from your load balancer target groups.
+
+   * From the **Existing load balancer target groups** dropdown list, choose **lab-target-group | HTTP**.
+
+In the **Health checks – optional** section, **for Health check type**, choose  **ELB**.
+
+4.6 Choose **Next**
+
+4.7 On the **Configure group size and scaling policies – optional** page, configure the following options: 
+
+   * In the Group size – optional section, enter the following values: 
+
+   * Desired capacity:2
+
+   * Minimum capacity: 2
+
+   * Maximum capacity: 4
+
+In the Scaling policies – optional section, configure the following options:
+
+  * Choose  Target tracking scaling policy.
+
+  * For Metric type, choose Average CPU utilization.
+
+  * Change the Target value to 50
+
+This change tells Auto Scaling to maintain an average CPU utilization across all instances of 50 percent. Auto Scaling automatically adds or removes capacity as required to keep the metric at or close to the specified target value. It adjusts to fluctuations in the metric due to a fluctuating load pattern.
+
+
+4.8 Choose **Next**
+
+4.9 On the Add notifications – optional page, choose Next.
+
+  * On the Add tags – optional page, choose Add tag and configure the following options:
+
+  * Key: Enter Name
+
+  * Value - optional: Enter Lab Instance
+
+  * Choose Next.
+  * Choose Create Auto Scaling group.
+
+These options launch EC2 instances in private subnets across both Availability Zones.
+
+Your Auto Scaling group initially shows an Instances count of zero, but new instances will be launched to reach the desired count of two instances.
+
+Note: If you experience an error related to the t3.micro instance type not being available, then rerun this task by choosing the t2.micro instance type instead.
 
 **STEP 5: VERIFYING THAT LOAD BALANCING IS WORKING**
 
+5.1 In the left navigation pane, locate the **Instances** section, and choose **Instances**.
+
+You should see two new instances named Lab Instance. These instances were launched by auto scaling.  If the instances or names are not displayed, wait 30 seconds, and then choose refresh .
+
+First, you confirm that the new instances have passed their health check.
+
+5.2 In the left navigation pane, in the Load Balancing section, choose Target Groups.
+
+5.3 Choose lab-target-group.
+
+In the Registered targets section, two Lab Instance targets should be listed for this target group.
+
+5.4 Wait until the Health status of both instances changes to healthy. To check for updates, choose refresh .
+
+   A healthy status indicates that an instance has passed the load balancer's health check. This check means that the load balancer will send traffic to the instance.
+
+   You can now access the instances launched in the Auto Scaling group using the load balancer.
+ 5.5 Open a new web browser tab, paste the DNS name that you copied before, and press Enter.
+
+   The Load Test application should appear in your browser, which means that the load balancer received the request, sent it to one of the EC2 instances, and then passed back the result.
+   
 **STEP 6: TESTING AUTO SCALING**
+
+6.1 Return to the AWS Management Console, but keep the Load Test application tab open. You return to this tab soon.
+
+6.2 In the AWS Management Console, in the search bar, enter and choose _CloudWatch_
+
+6.3 In the left navigation pane, in the Alarms section, choose All alarms.
+
+Two alarms are displayed. The Auto Scaling group automatically created these two alarms. These alarms automatically keep the average CPU load close to 50 percent while also staying within the limitation of having 2–4 instances.
+
+6.4 Choose the alarm that has **AlarmHigh** in its name. This alarm should have a **State** of _OK_.
+
+   * If the alarm is not showing OK for the State, wait a minute and then choose refresh  until the State changes.
+
+   The OK state indicates that the alarm has not been initiated. It is the alarm for **CPU Utilization > 50**, which adds instances when the average CPU utilization is high. The chart should show very low levels of CPU at the moment. 
+
+You now tell the application to perform calculations that should raise the CPU level.
+
+6.5 Return to the browser tab with the **Load Test** application.
+
+6.6 Next to the AWS logo, choose **Load Test**.
+
+This step causes the application to generate high loads. The browser page automatically refreshes so that all instances in the Auto Scaling group will generate loads. Do not close this tab.
+
+6.7 Return to browser tab with the CloudWatch Management Console.
+
+  * In less than 5 minutes, the AlarmLow alarm status should change to OK, and the AlarmHigh alarm status should change to In alarm.
+
+   * To update the display, choose refresh  every 60 seconds.
+
+   * You should see the AlarmHigh chart indicating an increasing CPU percentage. Once it crosses the 50 percent line for more than 3 minutes, it initiates auto scaling to add additional instances.
+
+6.8 Wait until the **AlarmHigh** alarm enters the In alarm state.
+
+  You can now view the additional instance or instances that were launched.
+
+6.9 In the AWS Management Console, in the search bar, enter and choose _EC2 _
+6.10 In the left navigation pane, locate the **Instances** section, and choose **Instances**.
+
+More than two instances named **Lab Instance** should now be running. Auto scaling created the new instances in response to the alarm.
 
 **STEP 7: TERMINATING THE WEB SERVER 1 INSTANCE**
 
+In the left navigation pane, locate the Instances section, and choose Instances.
+
+More than two instances named Lab Instance should now be running. Auto scaling created the new instances in response to the alarm. 
+
+7.1  <img width="442" height="150" alt="image" src="https://github.com/user-attachments/assets/608b90f3-f18d-4e86-a234-a2890379953a" />
 
 
 
